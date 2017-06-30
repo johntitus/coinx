@@ -1,0 +1,35 @@
+{
+  "name": "coinx",
+  "version": "0.1.0",
+  "description": "Buy and sell crypto-currencies from the command line.",
+  "main": "index.js",
+  "bin": {
+    "coinx": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bitcoin",
+    "crypto",
+    "currencies"
+  ],
+  "author": "John Titus",
+  "license": "MIT",
+  "dependencies": {
+    "bitfinex-api-node": "^1.0.2",
+    "bluebird": "^3.5.0",
+    "capitalize": "^1.0.0",
+    "chalk": "^2.0.1",
+    "columnify": "^1.5.4",
+    "commander": "^2.10.0",
+    "homedir": "^0.6.0",
+    "inquirer": "^3.1.1",
+    "kraken-api": "^0.1.7",
+    "mkdirp": "^0.5.1",
+    "node.bittrex.api": "^0.3.2",
+    "poloniex.js": "0.0.7",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
