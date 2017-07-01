@@ -156,7 +156,6 @@ class Kraken {
 				}
 			})
 			.catch( e => {
-				console.log(e);
 				let result = {
 					market: self.name,
 					available: false

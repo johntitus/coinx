@@ -65,8 +65,9 @@ if (program.exchange){
 
 let requests = exchanges.map(exchange => {
 	return exchange.getBalances().then( balance => {
-		
-		console.log(exchange.name, balance.available)
+		if (!balance.available){
+			console.log(chalk.red(capitalize(balance.market) + ' returned an error. Is your API key and secret correct?'));
+		}
 		return balance;
 	})
 });
@@ -75,65 +76,66 @@ Promise
 	.all(requests)
 	.then(balances => {
 		balances.forEach(balance => {
-			
-			let funds = balance.funds;
-			let coins = Object.keys( funds ).map( coin => {
-				return {
-					coin: coin,
-					count: funds[coin]
-				}
-			});
-			if (program.coin){
-				coins = coins.filter( coin => {
-					return coin.coin.toLowerCase() == program.coin.toLowerCase();
+			if (balance.available){
+				let funds = balance.funds;
+				let coins = Object.keys( funds ).map( coin => {
+					return {
+						coin: coin,
+						count: funds[coin]
+					}
 				});
-				if (coins.length == 0){
-					console.log(chalk.red('Coin not found on this exchange'));
-					process.exit(0);
+				if (program.coin){
+					coins = coins.filter( coin => {
+						return coin.coin.toLowerCase() == program.coin.toLowerCase();
+					});
+					if (coins.length == 0){
+						console.log(chalk.red('Coin not found on this exchange'));
+						process.exit(0);
+					}
 				}
-			}
-			if (program.alphabetically){
-				coins.sort( (a, b) => {
-					if (a.coin < b.coin){
-						return -1;
-					} else {
-						return 1;
-					}
-				})
-			}
-			if (program.numerically){
-				coins.sort( (a, b) => {
-					if (a.count > b.count){
-						return -1;
-					} else {
-						return 1;
-					}
-				})
-			}
-			let columns = columnify(coins, {
-				columns: ['coin', 'count'],
-				config: {
-					coin: {
-						headingTransform: function(heading) {
-							return capitalize(heading);
+				if (program.alphabetically){
+					coins.sort( (a, b) => {
+						if (a.coin < b.coin){
+							return -1;
+						} else {
+							return 1;
 						}
-					},
-					count: {
-						headingTransform: function(heading) {
-							return capitalize(heading);
-						},
-						dataTransform: function(data) {
-							return parseFloat(data).toFixed(8);
-						},
-						align: 'right'
-					}
+					})
 				}
-			});
-			console.log(chalk.green(capitalize(balance.market)));
-			console.log(columns);
-			console.log('');
-		})
-	})
+				if (program.numerically){
+					coins.sort( (a, b) => {
+						if (a.count > b.count){
+							return -1;
+						} else {
+							return 1;
+						}
+					})
+				}
+				let columns = columnify(coins, {
+					columns: ['coin', 'count'],
+					config: {
+						coin: {
+							headingTransform: function(heading) {
+								return capitalize(heading);
+							}
+						},
+						count: {
+							headingTransform: function(heading) {
+								return capitalize(heading);
+							},
+							dataTransform: function(data) {
+								return parseFloat(data).toFixed(8);
+							},
+							align: 'right'
+						}
+					}
+				});
+				console.log(chalk.green(capitalize(balance.market)));
+				console.log(columns);
+				console.log('');
+			}
+		});
+	});
 
 function showNotConfigured() {
 	console.log(chalk.red('Need to configure at least one exchange.'));
