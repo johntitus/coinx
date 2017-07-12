@@ -157,6 +157,10 @@ if (program.usd) {
 						console.log('Details:');
 						console.log(result);
 					}
+				})
+				.catch( e => {
+					console.error(chalk.red('An error occurred.'));
+					console.log(e);
 				});
 		});
 }

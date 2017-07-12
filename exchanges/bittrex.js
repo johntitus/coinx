@@ -131,10 +131,8 @@ class Bittrex {
 								rate = parseFloat(market.Ask);
 							}
 						});
+
 						numCoinsToBuy = (USDAmount / (rate * btcUSD)).toFixed(8);
-						//console.log('btcUSD', btcUSD);
-						//console.log('rate', rate);
-						//console.log('numCoinsToBuy', numCoinsToBuy);
 
 						var options = {
 							market: 'BTC-' + symbol,
@@ -146,8 +144,6 @@ class Bittrex {
 								reject(data.message);
 							} else {
 								orderNumber = data.result.uuid;
-								self.getOrderHistory('BTC-' + symbol)
-
 								resolve();
 							}
 						});
@@ -155,12 +151,20 @@ class Bittrex {
 				});
 			})
 			.then(data => {
-				return self.getOrderHistory('BTC-' + symbol);
+				return new Promise( ( resolve, reject ) => {
+					var options = {
+						uuid: orderNumber
+					}
+					return self.api.getorder(options, data => {
+						if (data.success){
+							resolve(data.result);
+						} else {
+							reject(data.message);
+						}
+					});
+				})
 			})
-			.then(orderHistory => {
-				let order = orderHistory.find(order => {
-					return (order.OrderUuid == orderNumber);
-				});
+			.then(order => {
 				let result = {
 					market: 'bittrex',
 					orderNumber: orderNumber,
