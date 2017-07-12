@@ -4,7 +4,7 @@
   "description": "Buy and sell crypto-currencies from the command line.",
   "main": "index.js",
   "bin": {
-    "coinx": "./index.js"
+    "coinx": "./coinx.js"
   },
   "repository": {
     "type": "git",
