@@ -139,6 +139,6 @@ Promise
 
 function showNotConfigured() {
 	console.log(chalk.red('Need to configure at least one exchange.'));
-	console.log(chalk.red('Run \'coinx configure [name of exchange]\''));
+	console.log(chalk.red('Run \'coinx config [name of exchange]\''));
 	process.exit(1);
 }
