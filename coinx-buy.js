@@ -149,7 +149,7 @@ if (program.usd) {
 					if (result.complete){
 						console.log(chalk.green('Order complete!'));
 						console.log(chalk.green(capitalize(result.market) + ' order number ' + result.orderNumber));
-						console.log(chalk.green('Bought ' + result.numCoinsBought + ' ' + symbol));
+						console.log(chalk.green('Bought ' + result.numCoinsBought + ' ' + symbol + ' at ' + result.rate + ' BTC per coin'));
 						console.log(chalk.green('Worth about $' + parseFloat(result.usdValue).toFixed(2) ));
 					} else {
 						console.log(chalk.green('Order placed, but not completed.'));
@@ -163,6 +163,7 @@ if (program.usd) {
 
 function getCoinPriceInBTC(symbol) {
 	console.log(chalk.blue('Checking ' + symbol + ' on the markets...'));
+	
 	let coinPriceRequests = exchanges.map(exchange => {
 		return exchange.getPriceInBTC(symbol).catch(e => {
 			console.log('error')

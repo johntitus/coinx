@@ -27,8 +27,10 @@
     "homedir": "^0.6.0",
     "inquirer": "^3.1.1",
     "kraken-api": "^0.1.7",
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "node.bittrex.api": "^0.3.2",
+    "node.liqui.io": "^1.0.0",
     "poloniex.js": "0.0.7",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"

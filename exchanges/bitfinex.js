@@ -10,31 +10,39 @@ class Bitfinex {
 			version: 1,
 			transform: true,
 			autoOpen: false
-		}).rest);		
+		}).rest);
 	};
 
 	getBTCinUSD() {
 		let self = this;
 		let pair = 'btcusd';
 		return this.rest.tickerAsync(pair)
-			.then( data => {
+			.then(data => {
 				return {
 					exchange: self.name,
 					symbol: 'BTC',
 					priceUSD: parseFloat(data.last_price),
+					volume: parseFloat(data.volume),
 					available: true
-				}				
+				}
+			})
+			.catch(e => {
+				return {
+					exchange: self.name,
+					symbol: 'BTC',
+					available: false
+				}
 			});
 	};
 
-	getPriceInBTC(symbol){
+	getPriceInBTC(symbol) {
 		let self = this;
-		if (symbol == 'BTC'){
+		if (symbol == 'BTC') {
 			return Promise.reject('Use getBTCinUSD to get BTC price.');
 		} else {
 			let pair = symbol + 'BTC';
 			return this.rest.tickerAsync(pair)
-				.then( data => {
+				.then(data => {
 					return {
 						exchange: self.name,
 						symbol: symbol,
@@ -42,15 +50,20 @@ class Bitfinex {
 						available: true
 					};
 				})
-				.catch( e => {
-					if (e.message == 'Unknown symbol'){
+				.catch(e => {
+					if (e.message == 'Unknown symbol') {
 						return {
 							exchange: self.name,
 							symbol: symbol,
 							available: false
 						}
 					} else {
-						console.log('error getting price from btc');
+						//console.log('error getting price from btc');
+						return {
+							exchange: self.name,
+							symbol: symbol,
+							available: false
+						}
 					}
 				});
 		}

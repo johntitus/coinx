@@ -20,12 +20,21 @@ class Bittrex {
 			this.api.getticker({
 				market: pair
 			}, data => {
-				let result = {
-					exchange: 'bittrex',
-					symbol: 'BTC',
-					priceUSD: data.result.Ask,
-					available: true
-				};
+				let result;
+				if (!data.result){
+					result = {
+						exchange: 'bittrex',
+						symbol: 'BTC',
+						available: false
+					};
+				} else {
+					result = {
+						exchange: 'bittrex',
+						symbol: 'BTC',
+						priceUSD: data.result.Ask,
+						available: true
+					};
+				}
 				resolve(result);
 			});
 		});

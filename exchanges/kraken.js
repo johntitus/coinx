@@ -29,7 +29,7 @@ class Kraken {
 		.catch( e => {
 			return {
 				exchange: 'kraken',
-				symbol: symbol,
+				symbol: 'BTC',
 				available: false
 			}
 		});

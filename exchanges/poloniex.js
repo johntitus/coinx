@@ -3,7 +3,7 @@
 const API = require('poloniex.js');
 const Promise = require('bluebird');
 
-class Poloniex{
+class Poloniex {
 	constructor(apiKey, apiSecret) {
 		this.name = 'poloniex';
 		this.api = Promise.promisifyAll(new API(apiKey, apiSecret));
@@ -12,7 +12,7 @@ class Poloniex{
 	getBTCinUSD() {
 		let self = this;
 		return this.api
-		.returnTickerAsync()
+			.returnTickerAsync()
 			.then(data => {
 				let result = {
 					exchange: self.name,
@@ -24,16 +24,16 @@ class Poloniex{
 			});
 	};
 
-	getPriceInBTC(symbol){
+	getPriceInBTC(symbol) {
 		let self = this;
-		if (symbol == 'BTC'){
+		if (symbol == 'BTC') {
 			return Promise.reject('Use getBTCinUSD to get BTC price.');
 		} else {
 			return this.api
 				.returnTickerAsync()
-				.then( data => {
+				.then(data => {
 					let pair = 'BTC_' + symbol;
-					if ( data[pair] ) {
+					if (data[pair]) {
 						let result = {
 							exchange: self.name,
 							symbol: symbol,
@@ -49,12 +49,19 @@ class Poloniex{
 						};
 						return result;
 					}
-					
+
+				})
+				.catch(e => {
+					let result = {
+						exchange: self.name,
+						symbol: symbol,
+						available: false
+					};
 				});
 		}
 	};
 
-	buy(symbol, USDAmount){
+	buy(symbol, USDAmount) {
 		var self = this;
 		let orderNumber;
 		let numCoinsToBuy;
@@ -63,19 +70,16 @@ class Poloniex{
 		let orderResult;
 
 		return this.api.returnTickerAsync()
-			.then( data => {
+			.then(data => {
 				btcUSD = data['USDT_BTC'].last;
 
 				rate = parseFloat(data['BTC_' + symbol].lowestAsk);
-				
+
 				numCoinsToBuy = (USDAmount / (rate * btcUSD)).toFixed(8);
-				console.log('lowest ask', rate);
-				console.log('num coins to buy', numCoinsToBuy);
-				
+
 				return self.api.buyAsync('BTC', symbol, rate, numCoinsToBuy);
 			})
-			.then( orderData => {
-				console.log(orderData)
+			.then(orderData => {
 				
 				let orderResult = {
 					market: self.name,
@@ -84,37 +88,37 @@ class Poloniex{
 					rate: rate,
 					complete: false
 				}
-				if (orderData.resultingTrades.length){
-					orderData.resultingTrades.forEach( trade => {
+				if (orderData.resultingTrades.length) {
+					orderData.resultingTrades.forEach(trade => {
 						orderResult.numCoinsBought += parseFloat(trade.amount);
 					});
 					orderResult.complete = (orderResult.numCoinsBought == numCoinsToBuy);
 					orderResult.usdValue = rate * orderResult.numCoinsBought * btcUSD;
 					return orderResult;
-				}  else {
+				} else {
 					console.log('not filled')
 					return Promise.delay(500)
-						.then( () => {
+						.then(() => {
 							this.api.returnOrderTradesAsync(orderResult.orderNumber);
-						})					
-						.then( trades => {
+						})
+						.then(trades => {
 							console.log(trades);
 							return orderResult;
 						});
 				}
-				
+
 			});
 	};
 
-	getBalances(){
+	getBalances() {
 		let self = this;
 		return this.api
 			.myBalancesAsync()
-			.then( data => {
+			.then(data => {
 				let balances = {};
-				Object.keys(data).forEach( key => {
+				Object.keys(data).forEach(key => {
 					let balance = parseFloat(data[key]);
-					if (balance){
+					if (balance) {
 						balances[key] = balance;
 					}
 				});
@@ -125,7 +129,7 @@ class Poloniex{
 				}
 				return result;
 			})
-			.catch( e => {
+			.catch(e => {
 				let result = {
 					market: self.name,
 					available: false

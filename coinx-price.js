@@ -34,6 +34,16 @@ console.log(chalk.blue('Getting prices for ' + symbol + '...'));
 
 let requests = exchanges.map( exchange => {
 	return exchange.getBTCinUSD()
+		.then( data => {
+			//console.log('data from ' + exchange.constructor.name);
+			//console.log(data);
+			return data;
+		})
+		.catch( e => {
+			console.log('error getting btc in usd')
+			console.log(e);
+			return {}
+		})
 });
 
 if (symbol !== 'BTC'){
@@ -111,7 +121,9 @@ function processBTC(results){
 
 
 function processCoin(results){
-	let btcPrices = results.slice(0, exchanges.length);
+	let btcPrices = results.slice(0, exchanges.length).filter( result => {
+		return result.available;
+	});
 		
 	let btcPrice = btcPrices.map(result => {
 		return result.priceUSD;
