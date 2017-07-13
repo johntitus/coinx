@@ -2,9 +2,9 @@
   "name": "coinx",
   "version": "0.2.0",
   "description": "Buy and sell crypto-currencies from the command line.",
-  "main": "index.js",
+  "main": "coinx.js",
   "bin": {
-    "coinx": "./index.js"
+    "coinx": "./coinx.js"
   },
   "repository": {
     "type": "git",

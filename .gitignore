@@ -56,3 +56,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# ignore test.js
+test.js

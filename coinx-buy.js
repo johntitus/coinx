@@ -9,11 +9,13 @@ const capitalize = require('capitalize');
 const inquirer = require('inquirer');
 const columnify = require('columnify');
 
-const Poloniex = require('./exchanges/poloniex');
-const Liqui = require('./exchanges/liqui');
-const Bittrex = require('./exchanges/bittrex');
-const Bitfinex = require('./exchanges/bitfinex');
-const Kraken = require('./exchanges/kraken');
+const Poloniex = require('./lib/poloniex');
+const Liqui = require('./lib/liqui');
+const Bittrex = require('./lib/bittrex');
+const Bitfinex = require('./lib/bitfinex');
+const Kraken = require('./lib/kraken');
+
+const cryptocompare = require('./lib/cryptocompare');
 
 const coinxHome = path.join(homedir(), 'coinx');
 const keyFilePath = path.join(coinxHome, 'coinx.json');
@@ -188,28 +190,7 @@ function getCoinPriceInBTC(symbol) {
 }
 
 function getBTCPriceInUSD() {
-	let btcPriceRequests = exchanges.map(exchange => {
-		return exchange.getBTCinUSD();
-	});
-
-	return Promise
-		.all(btcPriceRequests)
-		.then(results => {
-
-			let priceResults = results.filter(result => {
-				return result.available;
-			});
-			if (!priceResults.length) {
-				console.log(chalk.red('Coin not found on any exchange.'));
-				process.exit(0);
-			}
-
-			let averageUSD = priceResults.reduce((sum, result) => {
-				return parseFloat(sum) + parseFloat(result.priceUSD);
-			}, 0.0) / priceResults.length;
-
-			return averageUSD;
-		});
+	return cryptocompare.price('BTC','USD');
 }
 
 function showNotConfigured() {

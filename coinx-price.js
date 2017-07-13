@@ -5,11 +5,13 @@ const chalk = require('chalk');
 const capitalize = require('capitalize');
 const columnify = require('columnify');
 
-const Poloniex = require('./exchanges/poloniex');
-const Liqui = require('./exchanges/liqui');
-const Bittrex = require('./exchanges/bittrex');
-const Bitfinex = require('./exchanges/bitfinex');
-const Kraken = require('./exchanges/kraken');
+const Poloniex = require('./lib/poloniex');
+const Liqui = require('./lib/liqui');
+const Bittrex = require('./lib/bittrex');
+const Bitfinex = require('./lib/bitfinex');
+const Kraken = require('./lib/kraken');
+
+const cryptocompare = require('./lib/cryptocompare');
 
 let exchanges = [
 	new Poloniex(),
@@ -32,26 +34,19 @@ symbol = symbol[0].toUpperCase();
 
 console.log(chalk.blue('Getting prices for ' + symbol + '...'));
 
-let requests = exchanges.map( exchange => {
-	return exchange.getBTCinUSD()
-		.then( data => {
-			//console.log('data from ' + exchange.constructor.name);
-			//console.log(data);
-			return data;
-		})
-		.catch( e => {
-			console.log('error getting btc in usd')
-			console.log(e);
-			return {}
-		})
-});
 
-if (symbol !== 'BTC'){
+let requests = [];
+
+if (symbol == 'BTC'){
+	requests = exchanges.map( exchange => {
+		return exchange.getBTCinUSD()
+	});
+} else {
+	requests = [
+		cryptocompare.price('BTC','USD')
+	];
 	let priceInBTCRequests = exchanges.map( exchange => {
-		return exchange.getPriceInBTC(symbol).then( result => {
-			//console.log(result);
-			return result;
-		});
+		return exchange.getPriceInBTC(symbol);
 	});
 	requests = requests.concat(priceInBTCRequests);
 }
@@ -121,17 +116,9 @@ function processBTC(results){
 
 
 function processCoin(results){
-	let btcPrices = results.slice(0, exchanges.length).filter( result => {
-		return result.available;
-	});
-		
-	let btcPrice = btcPrices.map(result => {
-		return result.priceUSD;
-	}).reduce((sum, value) => {
-		return sum + value;
-	}, 0) / exchanges.length;
+	let btcPrice = results.shift();
 
-	let priceResults = results.slice(exchanges.length).filter(result => {
+	let priceResults = results.filter(result => {
 		return result.available && result.priceBTC;
 	}).map(result => {
 		result.priceUSD = (result.priceBTC * btcPrice).toFixed(3);
