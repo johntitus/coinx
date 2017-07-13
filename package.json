@@ -1,6 +1,6 @@
 {
   "name": "coinx",
-  "version": "0.2.1",
+  "version": "0.7.1",
   "description": "Buy and sell crypto-currencies from the command line.",
   "main": "coinx.js",
   "bin": {

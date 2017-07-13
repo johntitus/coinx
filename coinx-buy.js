@@ -19,12 +19,21 @@ const cryptocompare = require('./lib/cryptocompare');
 
 const coinxHome = path.join(homedir(), 'coinx');
 const keyFilePath = path.join(coinxHome, 'coinx.json');
+const coinListPath = path.join(coinxHome, 'coinList.json');
 
 let configured = true;
 if (!fs.existsSync(keyFilePath)) showNotConfigured();
 
 let keys = require(keyFilePath);
 if (!Object.keys(keys).length) showNotConfigured();
+
+let coins = {};
+try {
+	coins = require(coinListPath);
+} catch (e) {
+	console.error(chalk.red('Please run `coinx update` to get the latest list of coins.'));
+	process.exit(1);
+}
 
 program
 	.option('-$, --usd [amount]', 'Amount of US Dollars to spend.')
@@ -168,7 +177,11 @@ if (program.usd) {
 }
 
 function getCoinPriceInBTC(symbol) {
-	console.log(chalk.blue('Checking ' + symbol + ' on the markets...'));
+	if (coins[symbol]){
+		console.log(chalk.blue('Checking ' + coins[symbol].name + ' (' + symbol + ') on the markets...'));
+	} else {
+		console.log(chalk.blue('Checking ' + symbol + ' on the markets...'));
+	}
 	
 	let coinPriceRequests = exchanges.map(exchange => {
 		return exchange.getPriceInBTC(symbol).catch(e => {

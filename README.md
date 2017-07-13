@@ -5,6 +5,10 @@ A command-line tool to interact with multiple crypto-currencies exchanges. Buy, 
 Install it globally on your computer.
 `npm install -g coinx`
 
+## Upgrade to the latest version
+Coinx is currently at version 0.7.1.  You can upgrade with npm:
+`npm update -g coinx`
+
 ## Supported Exchanges
 Currently: Kraken, Poloniex, Bitfinex, Liqui, Bittrex. 
 
@@ -18,6 +22,9 @@ Saved data for Kraken
 ```
 
 Note: Your API Keys and Secrets are stored in your operating system home directory in a `coinx` directory as a JSON file.
+
+## Update
+Use `coinx update` to update coinx with the latest list of coins from [coinmarketcap.com](https://coinmaketcap.com). 
 
 ## Coin Price
 Get the price of any crypto-currency by using the coin's symbol. Bitcoin is shown in US Dollars, all other coins are shown in BTC and in US Dollars.
@@ -38,26 +45,26 @@ Average      $2435.59
 Or, to get the price of Etherium:
 ```bash
 $ coinx price eth
-Getting prices for ETH...
+Getting prices for Ethereum (ETH)...
 Exchange Price in BTC Price in USD
-Bittrex    0.11339041      $275.69
-Poloniex   0.11353471      $276.04
-Bitfinex   0.11360000      $276.20
-Kraken     0.11367900      $276.39
-Liqui      0.11460000      $278.63
+Liqui      0.08789270      $208.30
+Poloniex   0.08809500      $208.78
+Kraken     0.08811500      $208.82
+Bitfinex   0.08821900      $209.07
+Bittrex    0.08840483      $209.51
                                   
-Average    0.11376082      $276.59
+Average    0.08814531      $208.89
 ```
 
 Or, for Siacoin:
 ```bash
 $ coinx price sc
-Getting prices for SC...
+Getting prices for Siacoin (SC)...
 Exchange Price in BTC Price in USD
-Bittrex    0.00000564        $0.01
-Poloniex   0.00000566        $0.01
+Bittrex    0.00000335        $0.01
+Poloniex   0.00000333        $0.01
                                   
-Average    0.00000565        $0.01
+Average    0.00000334        $0.01
 ```
 
 ## Check Exchange Funds
@@ -66,19 +73,14 @@ Check your balances on the exchanges.
 ```bash
 $ coinx funds
 Getting balances...
-
 Poloniex
-Coin          Count
-ARDR    18.48537732
-BCN      2.85258566
+Name             Symbol          Count Value USD
+Bitcoin          BTC        0.03227520    $76.51
+Siacoin          SC      2465.11765598    $19.46
+NEM              XEM      151.10258763    $18.43
+Dash             DASH       0.09817530    $16.94
 
-Liqui
-Coin         Count
-BTC     0.00016854
-
-Bittrex
-Coin         Count
-1ST    10.10023974
+...
 ```
 Options:
 ```bash
@@ -90,34 +92,36 @@ Options:
     -n, --numerically      Sort the balance list by the number of coins, descending.
     -c, --coin [symbol]    Only get balances for this coin.
 ```
-For example, to check balances only on Poloniex:
+For example, to check balances only on Liqui:
 ```bash
 $ coinx funds -e poloniex
-Getting balances on Poloniex...
-Poloniex
-Coin          Count
-ARDR     6.48537732
-BCN      2.85258566
+Getting balances on Liqui...
+Liqui
+Name                  Symbol        Count Value USD
+Bitcoin               BTC      0.02564645    $30.77
+Ethereum              ETH      0.08706164    $18.04
+Augur                 REP      0.66674308    $13.59
+MobileGo              MGO     17.23038495    $13.33
+...
 ```
 Or, to check how many BTC you have on all the exchanges:
 ```bash
 $ coinx funds -c btc
 Getting balances...
 Poloniex
-Coin      Count
-BTC  0.00076948
-
+Name    Symbol      Count Value USD
+Bitcoin BTC    0.00227520    $6.53
+Total                        $6.53
+Kraken
+Name    Symbol      Count Value USD
+Bitcoin BTC    0.00237879    $6.40
+Total                        $6.40
 Liqui
-Coin      Count
-BTC  0.00086854
+Name    Symbol      Count Value USD
+Bitcoin BTC    0.00256464    $6.81
+Total                        $6.81
 
-Bittrex
-Coin      Count
-BTC  0.00057939
 
-Bitfinex
-Coin      Count
-BTC  0.00098090
 ```
 ## Buy Coins
 Buy a coin by specifying, in US dollars, how much you want to spend. Note that BTC is what will actually be spent! You must have the necessary BTC available on the exchange for the purchase to go through.
@@ -129,7 +133,7 @@ Before the purchase goes through, you'll be asked to confirm.
 For example, to buy $2 worth of AntShares at the best available price:
 ```bash
 $ coinx buy ans -$ 2
-Checking ANS on the markets...
+Checking AntShares (ANS) on the markets...
 Best price found on Bittrex at $8.14
 
 *Note that the number of coins may change slightly if the market fluctuates*
@@ -144,7 +148,7 @@ Worth about $2.00
 Or, to buy $2 worth of Ethereum on the Liqui exchange:
 ```bash
 $ coinx buy eth -e liqui -$ 2
-Checking ETH on the markets...
+Checking Ethereum (ETH) on the markets...
 Best price found on Liqui at $278.70
 
 *Note that the number of coins may change slightly if the market fluctuates*

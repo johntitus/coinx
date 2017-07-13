@@ -4,6 +4,8 @@ const program = require('commander');
 const chalk = require('chalk');
 const capitalize = require('capitalize');
 const columnify = require('columnify');
+const path = require('path');
+const homedir = require('homedir');
 
 const Poloniex = require('./lib/poloniex');
 const Liqui = require('./lib/liqui');
@@ -12,6 +14,17 @@ const Bitfinex = require('./lib/bitfinex');
 const Kraken = require('./lib/kraken');
 
 const cryptocompare = require('./lib/cryptocompare');
+
+const coinxHome = path.join(homedir(), 'coinx');
+const coinListPath = path.join(coinxHome, 'coinList.json');
+
+let coins = {};
+try {
+	coins = require(coinListPath);
+} catch (e) {
+	console.error(chalk.red('Please run `coinx update` to get the latest list of coins.'));
+	process.exit(1);
+}
 
 let exchanges = [
 	new Poloniex(),
@@ -32,7 +45,11 @@ if (!symbol.length) {
 
 symbol = symbol[0].toUpperCase();
 
-console.log(chalk.blue('Getting prices for ' + symbol + '...'));
+if (coins[symbol]){
+	console.log(chalk.blue('Getting prices for ' + coins[symbol].name + ' (' + symbol + ')...'));
+} else {
+	console.log(chalk.blue('Getting prices for ' + symbol + '...'));
+}
 
 
 let requests = [];
