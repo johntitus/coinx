@@ -4,7 +4,7 @@
 var program = require('commander');
 
 program
-  .version('0.2.1')
+  .version(require('./package.json').version)
   .command('price [symbol]', 'get the price of a coin from all exchanges').alias('p')
   .command('buy [symbol]', 'buy a coin from an exchange. Auto finds the best price.').alias('b')
   .command('config [exchange]', 'set your api keys for an exchange').alias('c')
