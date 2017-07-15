@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.0
+Yet another version increase.
+- Rewrite of the configuration part that allows to add more markets quicker
+
 ## 0.7.1
 Arbitrarily large version increase :)
 - Fixes issues 5 & 6 (output bugs when buying)
