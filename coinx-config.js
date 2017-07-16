@@ -1,30 +1,17 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
+const coinx = require('./coinx-core');
 const program = require('commander');
 const chalk = require('chalk');
-const homedir = require('homedir');
 const capitalize = require('capitalize');
 const inquirer = require('inquirer');
-const mkdirp = require('mkdirp');
-
-const coinxHome = path.join(homedir(),'coinx');
-const keyFilePath = path.join(coinxHome,'coinx.json');
+const validExchanges = Object.keys(coinx.exchanges());
 
 program
 	.option('-d, --delete', 'Delete config for the exchange.')
 	.parse(process.argv);
 
 var exchange = program.args;
-
-let validExchanges = [
-	'poloniex',
-	'bittrex',
-	'liqui',
-	'kraken',
-	'bitfinex'
-];
 
 if (!exchange.length || validExchanges.indexOf(exchange[0]) == -1) {
 	console.error(chalk.red('Please specify an exchange: ' + validExchanges.join(', ')));
@@ -33,10 +20,10 @@ if (!exchange.length || validExchanges.indexOf(exchange[0]) == -1) {
 exchange = exchange[0];
 
 if (program.delete){
-	if (fs.existsSync(keyFilePath)){
-		let keys = require(keyFilePath);
-		delete keys[exchange];
-		fs.writeFileSync(keyFilePath, JSON.stringify(keys, null, 4));
+	let config = coinx.config();
+	if (config[exchange]){
+		delete config[exchange];
+		coinx.config(config);
 		console.log(chalk.green('Deleted data for ' + capitalize(exchange)));
 	} else {
 		console.log(chalk.green('Data not found for ' + capitalize(exchange)));
@@ -58,12 +45,8 @@ let questions = [
 inquirer
 	.prompt(questions)
 	.then( results => {
-		mkdirp.sync(coinxHome);
-		let keys = {};
-		if (fs.existsSync(keyFilePath)){
-			keys = require(keyFilePath);
-		}
-		keys[exchange] = results;
-		fs.writeFileSync(keyFilePath, JSON.stringify(keys, null, 4));
+		let config = coinx.config();
+		config[exchange] = results;
+		coinx.config(config);
 		console.log(chalk.green('Saved data for ' + capitalize(exchange)));
 	});

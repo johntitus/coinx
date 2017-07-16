@@ -1,38 +1,18 @@
 'use strict';
 
+const coinx = require('./coinx-core');
 const program = require('commander');
 const chalk = require('chalk');
 const capitalize = require('capitalize');
 const columnify = require('columnify');
-const path = require('path');
-const homedir = require('homedir');
-
-const Poloniex = require('./lib/poloniex');
-const Liqui = require('./lib/liqui');
-const Bittrex = require('./lib/bittrex');
-const Bitfinex = require('./lib/bitfinex');
-const Kraken = require('./lib/kraken');
-
 const cryptocompare = require('./lib/cryptocompare');
+const coins = coinx.coins();
+const exchanges = Object.values(coinx.exchanges());
 
-const coinxHome = path.join(homedir(), 'coinx');
-const coinListPath = path.join(coinxHome, 'coinList.json');
-
-let coins = {};
-try {
-	coins = require(coinListPath);
-} catch (e) {
+if (Object.keys(coins).length === 0) {
 	console.error(chalk.red('Please run `coinx update` to get the latest list of coins.'));
 	process.exit(1);
 }
-
-let exchanges = [
-	new Poloniex(),
-	new Liqui(),
-	new Bittrex(),
-	new Bitfinex(),
-	new Kraken()
-];
 
 program.parse(process.argv);
 
@@ -116,7 +96,6 @@ function processBTC(results){
 					return capitalize(data);
 				}
 			},
-			
 			priceUSD: {
 				headingTransform: function(heading) {
 					return 'Price in USD'
