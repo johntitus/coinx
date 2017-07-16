@@ -45,7 +45,7 @@ class Coinx {
 	}
 
 	static configFilePath() {
-		return path.join(homedir(), 'coinx', 'config.json');
+		return path.join(homedir(), 'coinx', 'coinx.json');
 	}
 
 	static configPath() {

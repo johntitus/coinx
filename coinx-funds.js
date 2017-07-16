@@ -29,6 +29,7 @@ program
 	.option('-a, --alphabetically', 'Sort the balance list alphabetically.')
 	.option('-n, --numerically', 'Sort the balance list by the number of coins, descending.')
 	.option('-c, --coin [symbol]', 'Only get balances for this coin.')
+	.option('-v, --value', 'Sort the balance list by the value of each coin in US dollars, descending.')
 	.parse(process.argv);
 
 if (program.exchange) {
@@ -81,7 +82,7 @@ Promise
 			if (balance.available) {
 				let funds = balance.funds;
 				let coins = Object.keys(funds).map(coin => {
-					let name = (coinLookup[coin]) ? coinLookup[coin].name : '';
+					let name = (coinsLookup[coin]) ? coinsLookup[coin].name : '';
 					return {
 						name: name,
 						symbol: coin,
