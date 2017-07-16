@@ -30,18 +30,18 @@ if (Object.keys(config).length === 0) {
 }
 
 let symbol = program.args;
-if (! symbol.length) {
+if (!symbol.length) {
 	console.error(chalk.red('No coin symbol provided.'));
 	process.exit(1);
 }
 
 symbol = symbol[0].toUpperCase();
-if (! program.usd) {
+if (!program.usd) {
 	console.log(chalk.red('You must specify the amount of USD to spend. -$ or --usd'));
 }
 
 if (program.exchange) {
-	if (Object.keys(exchanges).indexOf(program.exchange) === -1){
+	if (Object.keys(exchanges).indexOf(program.exchange) === -1) {
 		console.log(chalk.red('Unknown exchange'));
 		process.exit(1);
 	}
@@ -111,20 +111,33 @@ if (program.usd) {
 					console.log(chalk.green('Buying...'));
 					return exchanges[bestMarket.exchange].buy(symbol, program.usd);
 				})
-				.then( result => {
-					if (result.complete){
+				.then(result => {
+					if (result.complete) {
 						console.log(chalk.green('Order complete!'));
 						console.log(chalk.green(capitalize(result.market) + ' order number ' + result.orderNumber));
 						console.log(chalk.green('Bought ' + result.numCoinsBought + ' ' + symbol + ' at ' + result.rate + ' BTC per coin'));
-						console.log(chalk.green('Worth about $' + parseFloat(result.usdValue).toFixed(2) ));
+						console.log(chalk.green('Worth about $' + parseFloat(result.usdValue).toFixed(2)));
 					} else {
 						console.log(chalk.green('Order placed, but not completed.'));
 						console.log(chalk.green(capitalize(result.market) + ' order number ' + result.orderNumber));
 						console.log('Details:');
 						console.log(result);
 					}
+
+					let logParams = {
+						action: 'buy',
+						exchange: result.market,
+						orderNumber: result.orderNumber,
+						baseCurrency: symbol,
+						quoteCurrency: 'BTC',
+						amount: result.numCoinsBought,
+						rate: result.rate,
+						valueUSD: parseFloat(result.usdValue).toFixed(2),
+						complete: result.complete
+					}
+					return coinx.log(logParams);
 				})
-				.catch( e => {
+				.catch(e => {
 					console.error(chalk.red('An error occurred.'));
 					console.log(e);
 				});
@@ -132,7 +145,7 @@ if (program.usd) {
 }
 
 function getCoinPriceInBTC(exchanges, symbol) {
-	if (coins[symbol]){
+	if (coins[symbol]) {
 		console.log(chalk.blue('Checking ' + coins[symbol].name + ' (' + symbol + ') on the markets...'));
 	} else {
 		console.log(chalk.blue('Checking ' + symbol + ' on the markets...'));
@@ -158,6 +171,5 @@ function getCoinPriceInBTC(exchanges, symbol) {
 }
 
 function getBTCPriceInUSD() {
-	return cryptocompare.price('BTC','USD');
+	return cryptocompare.price('BTC', 'USD');
 }
-

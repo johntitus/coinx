@@ -2,8 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.8.0
-Yet another version increase.
-- Rewrite of the configuration part that allows to add more markets quicker
+- Adds logging. Closes issue #16.
+- Rewrite of the configuration part that allows to add more markets quicker (thanks @AlexandrFox)
+- Fixes version display number (thanks @driftfox)
+
 
 ## 0.7.1
 Arbitrarily large version increase :)

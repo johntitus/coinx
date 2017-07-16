@@ -160,6 +160,6 @@ Liqui order number 0
 Bought 0.00717629 ETH
 Worth about $2.00
 ```
-
+The results of all purchases are logged into `{home folder}/coinx/log.csv`.
 ## Sell Coins
 Coming soon.
