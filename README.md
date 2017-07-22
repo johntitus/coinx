@@ -163,3 +163,16 @@ Worth about $2.00
 The results of all purchases are logged into `{home folder}/coinx/log.csv`.
 ## Sell Coins
 Coming soon.
+
+## Lock
+Encrypt the file that contains your API keys. Please choose a good password, and don't forget it. If you do forget it, you'll have to delete the `coinx.json` file in your `{homedir}/coinx` folder, and rerun `coinx config` for each exchange.
+```
+coinx lock password
+```
+After you lock your config, you will not be able to use coinx until you unlock it.
+
+## Unlock
+Decrypt your API key file.
+```
+coinx unlock password
+```
