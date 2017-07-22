@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.9.0 - 2017-07-22
+- Adds `lock` and `unlock`, which will encrypt and decrypt the coinx file that contains your API keys.
+
 ## 0.8.0
 - Adds logging. Closes issue #16.
 - Rewrite of the configuration part that allows to add more markets quicker (thanks @AlexandrFox)
