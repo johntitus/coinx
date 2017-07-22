@@ -8,4 +8,6 @@ program
   .command('config [exchange]', 'set your api keys for an exchange').alias('c')
   .command('funds', 'get a list of your funds from the exchanges').alias('f')
   .command('update', 'updates the list of known coins').alias('u')
+  .command('lock', 'encrypts configuration file with a password').alias('l')
+  .command('unlock', 'decrypts configuration file with a password').alias('u')
   .parse(process.argv);

@@ -53,7 +53,9 @@ if (program.exchange) {
 	console.log(chalk.blue('Buying on ' + capitalize(program.exchange) + '...'));
 } else {
 	for (const name in config) {
-		exchangesToRequest.push(exchanges[name]);
+		if (name !== 'passwordHash'){
+			exchangesToRequest.push(exchanges[name]);
+		}
 	}
 	console.log(chalk.blue('Buying...'));
 }

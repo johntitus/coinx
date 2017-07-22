@@ -6,6 +6,9 @@ const os = require('os');
 const homedir = require('homedir');
 const json2csv = require('json2csv');
 const moment = require('moment');
+const chalk = require('chalk');
+const crypto = require('crypto');
+const algorithm = 'aes-256-ctr';
 
 const exchangeModules = [
 	'bitfinex',
@@ -73,11 +76,49 @@ class Coinx {
 			return newConfig;
 		} else {
 			if (fs.existsSync(Coinx.configFilePath())) {
-				return require(Coinx.configFilePath());
+				try {
+					let config = require(Coinx.configFilePath());
+					return config;
+				} catch (e) {
+					console.log(chalk.red('Could not read config file. Is it locked?'));
+					process.exit(1);
+				}
 			} else {
 				return {};
 			}
 		}
+	}
+
+	static lockConfig(encryptedConfig) {
+		if (!fs.existsSync(Coinx.configPath())) {
+			fs.mkdirSync(Coinx.configPath());
+		}
+		fs.writeFileSync(Coinx.configFilePath(), encryptedConfig);
+		console.log(chalk.green('Config file locked.'));
+	}
+
+	static unlockConfig(hash) {
+		function decrypt(text, password) {
+			var decipher = crypto.createDecipher(algorithm, password)
+			var dec = decipher.update(text, 'hex', 'utf8')
+			dec += decipher.final('utf8');
+			return dec;
+		}
+		try {
+			require(Coinx.configFilePath());
+			console.log(chalk.red('Config already unlocked'));
+		} catch (e) {
+			let data = fs.readFileSync(Coinx.configFilePath()).toString();
+			try {
+				let decrypted = JSON.parse(decrypt(data, hash));
+				Coinx.config(decrypted);
+				console.log(chalk.green('Config file unlocked.'));
+			} catch (e) {
+				console.log(chalk.red('Wrong password.'));
+				process.exit(1);
+			}
+		}
+
 	}
 
 	/***********
@@ -120,13 +161,16 @@ class Coinx {
 					return;
 				}
 			})
-			.then( () => {
+			.then(() => {
 				params.date = moment().format('YYYY-MM-DD HH:mm:ss');
-				let csv = json2csv({fields: fields, data: params, hasCSVColumnTitle: false});
+				let csv = json2csv({
+					fields: fields,
+					data: params,
+					hasCSVColumnTitle: false
+				});
 				return fs.appendFile(Coinx.configLogPath(), os.EOL + csv);
 			});
 	}
-
 }
 
 module.exports = Coinx;

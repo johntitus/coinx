@@ -8,6 +8,7 @@ const columnify = require('columnify');
 const cryptocompare = require('./lib/cryptocompare');
 const coins = coinx.coins();
 const exchanges = Object.values(coinx.exchanges());
+delete exchanges.passwordHash;
 
 if (Object.keys(coins).length === 0) {
 	console.error(chalk.red('Please run `coinx update` to get the latest list of coins.'));

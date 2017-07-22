@@ -45,7 +45,9 @@ if (program.exchange) {
 	console.log(chalk.blue('Getting balances on ' + capitalize(program.exchange) + '...'));
 } else {
 	for (const name in config) {
-		exchangesToCheck.push(exchanges[name]);
+		if (name !== 'passwordHash'){
+			exchangesToCheck.push(exchanges[name]);
+		}
 	}
 	console.log(chalk.blue('Getting balances...'));
 }

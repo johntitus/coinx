@@ -1,6 +1,6 @@
 {
   "name": "coinx",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Buy and sell crypto-currencies from the command line.",
   "main": "coinx.js",
   "bin": {
@@ -36,6 +36,7 @@
     "node.liqui.io": "^1.0.0",
     "poloniex.js": "0.0.7",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "zxcvbn": "^4.4.2"
   }
 }
