@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.1 - 2017-07-23
+- Fixes a bug where `coinx funds -c` would terminate if any of the exchanges did not have that currency.
+
 ## 0.10.0 - 2017-07-23
 - Adds `coinx action` to run custom scripts that make use of coinx-core. 
 - Adds buyallthecoins action. Lets you buy the top crypto coins in an automated fashion.
