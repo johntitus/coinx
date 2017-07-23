@@ -98,8 +98,10 @@ Promise
 						return coin.symbol.toLowerCase() == program.coin.toLowerCase();
 					});
 					if (coins.length == 0) {
-						console.log(chalk.red('Coin not found on this exchange'));
-						process.exit(0);
+						if (program.exchange){
+							console.log(chalk.red('Coin not found on this exchange.'));
+						}
+						return;
 					}
 				}
 				if (program.alphabetically) {
