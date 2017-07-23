@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.0 - 2017-07-23
+- Adds `coinx action` to run custom scripts that make use of coinx-core. 
+- Adds buyallthecoins action. Lets you buy the top crypto coins in an automated fashion.
+
 ## 0.9.0 - 2017-07-22
 - Adds `lock` and `unlock`, which will encrypt and decrypt the coinx file that contains your API keys.
 

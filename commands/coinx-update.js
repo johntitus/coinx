@@ -5,7 +5,7 @@ const program = require('commander');
 const chalk = require('chalk');
 const homedir = require('homedir');
 const path = require('path');
-const coinmarketcap = require('./lib/coinmarketcap');
+const coinmarketcap = require('../lib/coinmarketcap');
 
 console.log(chalk.blue('Updating coin list...'));
 

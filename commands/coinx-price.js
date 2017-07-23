@@ -5,7 +5,9 @@ const program = require('commander');
 const chalk = require('chalk');
 const capitalize = require('capitalize');
 const columnify = require('columnify');
-const cryptocompare = require('./lib/cryptocompare');
+
+const cryptocompare = require('../lib/cryptocompare');
+
 const coins = coinx.coins();
 const exchanges = Object.values(coinx.exchanges());
 delete exchanges.passwordHash;

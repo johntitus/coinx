@@ -1,18 +1,36 @@
 # coinx
 A command-line tool to interact with multiple crypto-currencies exchanges. Buy, sell, find the best price, and check your exchange balances.
 
-## Install
+#### Setup
+* [Installation](#install)
+* [Upgrading](#upgrade)
+* [Updating coin list](#update)
+* [Configure Exchanges](#configure)
+
+#### Usage
+* [Coin prices](#price)
+* [Check exchange funds](#funds)
+* [Buying coins](#buy)
+
+#### Security
+* [Encrypting API keys](#lock)
+* [Decrypting API keys](#unlock)
+
+#### Automation
+* [Buy all the coins](#buyallthecoins)
+
+## <a name="install"></a>Install
 Install it globally on your computer.
 `npm install -g coinx`
 
-## Upgrade to the latest version
-Coinx is currently at version 0.7.1.  You can upgrade with npm:
+## <a name="upgrade"></a>Upgrade to the latest version
+Coinx is currently at version 0.10.0 You can upgrade with npm:
 `npm update -g coinx`
 
 ## Supported Exchanges
 Currently: Kraken, Poloniex, Bitfinex, Liqui, Bittrex. 
 
-## Configure
+## <a name="configure"></a>Configure
 The tool uses your exchange API keys to make requests and queries. You'll have to get your API keys from each exchange manually, but then you can store it in the tool by using the `config` command.
 ```bash
 $ coinx config kraken
@@ -23,10 +41,10 @@ Saved data for Kraken
 
 Note: Your API Keys and Secrets are stored in your operating system home directory in a `coinx` directory as a JSON file.
 
-## Update
+## <a name="update"></a> Update
 Use `coinx update` to update coinx with the latest list of coins from [coinmarketcap.com](https://coinmaketcap.com). 
 
-## Coin Price
+## <a name="price"></a> Coin Price
 Get the price of any crypto-currency by using the coin's symbol. Bitcoin is shown in US Dollars, all other coins are shown in BTC and in US Dollars.
 
 For example, to get the price of Bitcoin:
@@ -67,7 +85,7 @@ Poloniex   0.00000333        $0.01
 Average    0.00000334        $0.01
 ```
 
-## Check Exchange Funds
+## <a name="funds"></a> Check Exchange Funds
 Check your balances on the exchanges.
 
 ```bash
@@ -123,7 +141,7 @@ Total                        $6.81
 
 
 ```
-## Buy Coins
+## <a name="buy"></a> Buy Coins
 Buy a coin by specifying, in US dollars, how much you want to spend. Note that BTC is what will actually be spent! You must have the necessary BTC available on the exchange for the purchase to go through.
 
 Coinx will automatically use the exchange with the best rate, unless you specify an exchange to use via the `--exchange` option.
@@ -164,15 +182,50 @@ The results of all purchases are logged into `{home folder}/coinx/log.csv`.
 ## Sell Coins
 Coming soon.
 
-## Lock
+## <a name="lock"></a> Lock
 Encrypt the file that contains your API keys. Please choose a good password, and don't forget it. If you do forget it, you'll have to delete the `coinx.json` file in your `{homedir}/coinx` folder, and rerun `coinx config` for each exchange.
 ```
 coinx lock password
 ```
 After you lock your config, you will not be able to use coinx until you unlock it.
 
-## Unlock
+## <a name="unlock"></a>Unlock
 Decrypt your API key file.
 ```
 coinx unlock password
+```
+
+## Actions
+Actions are a way to automate steps in coinx.
+
+### <a name="buyallthecoins"></a> Buy all the Coins!
+Lets you buy the top crypto coins by market cap. Specify how much you want to spend per coin (-$), and how many coins you want to buy (-t, default is 50).
+
+You can exclude coins by putting their symbol into the `exclude_coins.txt` in the actions/buyallthecoins folder. 
+```
+$ coinx action buyallthecoins -$ 2 -t 50
+Buy all the coins!
+Spend per coin: $2
+Coins to buy: 50
+Maximum spend: $100 (assumes all coins available to buy)
+Will not buy:  BTC, USDT, BCC, VERI
+? Proceed? Yes
+Getting latest Market Cap list...
+Got list...
+Skipping excluded coin Bitcoin.
+
+Buying Ethereum.
+Checking Ethereum (ETH) on the markets...
+Best price found on Bittrex at $228.64
+Buying 0.00874752 Ethereum on Bittrex
+Order complete!
+Bittrex order number e2fffabd-915b-4d13-bf37-af534cf82af8
+Bought 0.00874747 ETH at 0.08268905 BTC per coin
+Worth about $2.00
+
+Buying Ripple.
+Checking Ripple (XRP) on the markets...
+Best price found on Bittrex at $0.20
+...
+
 ```

@@ -8,6 +8,7 @@ const json2csv = require('json2csv');
 const moment = require('moment');
 const chalk = require('chalk');
 const crypto = require('crypto');
+
 const algorithm = 'aes-256-ctr';
 
 const exchangeModules = [
@@ -25,7 +26,7 @@ class Coinx {
 		const config = Coinx.config();
 		exchangeModules.forEach(function(file) {
 			let name = path.basename(file, '.js');
-			let classname = require('./lib/' + file);
+			let classname = require('../lib/' + file);
 			if (name in config) {
 				exchanges[name] = new classname(config[name].apiKey, config[name].apiSecret);
 			} else {
@@ -65,6 +66,10 @@ class Coinx {
 
 	static configLogPath() {
 		return path.join(Coinx.configPath(), 'log.csv');
+	}
+
+	static actionPath(){
+		return path.join(__dirname,'../actions/');
 	}
 
 	static config(newConfig) {
