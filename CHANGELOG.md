@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.11.0 - 2017-08-29
+- Fixes display of funds for IOT and CH (aka IOTA and BCH).
+
 ## 0.10.1 - 2017-07-23
 - Fixes a bug where `coinx funds -c` would terminate if any of the exchanges did not have that currency.
 
