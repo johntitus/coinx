@@ -72,6 +72,9 @@ Promise
 		results.forEach(exchange => {
 			if (exchange.available) {
 				Object.keys(exchange.funds).forEach(coin => {
+					if (coin == 'CH'){
+						coin = 'BCH';	
+					}
 					fsymbols.push(coin);
 				});
 			}
@@ -85,11 +88,14 @@ Promise
 				let funds = balance.funds;
 				let coins = Object.keys(funds).map(coin => {
 					let name = (coinsLookup[coin]) ? coinsLookup[coin].name : '';
+					if (coin == 'CH') name = 'Bitcoin Cash';
+					if (coin == 'IOT') name = 'IOTA';
+					let valueUSD = (coin != 'CH') ? funds[coin] * prices[coin] : funds[coin] * prices['BCH'];
 					return {
 						name: name,
 						symbol: coin,
 						count: funds[coin],
-						valueUSD: funds[coin] * prices[coin]
+						valueUSD: valueUSD
 					}
 				});
 
