@@ -33,7 +33,7 @@ program
 	.parse(process.argv);
 
 if (program.exchange) {
-	if (Object.keys(exchanges).indexOf(program.exchange) === -1){
+	if (Object.keys(exchanges).indexOf(program.exchange) === -1) {
 		console.log(chalk.red('Unknown exchange'));
 		process.exit(1);
 	}
@@ -45,7 +45,7 @@ if (program.exchange) {
 	console.log(chalk.blue('Getting balances on ' + capitalize(program.exchange) + '...'));
 } else {
 	for (const name in config) {
-		if (name !== 'passwordHash'){
+		if (name !== 'passwordHash') {
 			exchangesToCheck.push(exchanges[name]);
 		}
 	}
@@ -53,8 +53,8 @@ if (program.exchange) {
 }
 
 let requests = exchangesToCheck.map(exchange => {
-	return exchange.getBalances().then( balance => {
-		if (! balance.available) {
+	return exchange.getBalances().then(balance => {
+		if (!balance.available) {
 			console.log(chalk.red(capitalize(balance.market) + ' returned an error. Is your API key and secret correct?'));
 		}
 		return balance;
@@ -72,17 +72,36 @@ Promise
 		results.forEach(exchange => {
 			if (exchange.available) {
 				Object.keys(exchange.funds).forEach(coin => {
-					if (coin == 'CH'){
-						coin = 'BCH';	
+					if (coin == 'CH') {
+						coin = 'BCH';
 					}
 					fsymbols.push(coin);
 				});
 			}
 		});
+		
+		// Cryptocompare seems to break occasionaly if > 50 symbols are sent into 
+		// priceMulti at the same time.
 		fsymbols = _.uniq(fsymbols);
-		return cryptocompare.priceMulti(_.uniq(fsymbols), 'USD');
+
+		var i, j, temparray, chunk = 30;
+		let tasks = [];
+		for (i = 0, j = fsymbols.length; i < j; i += chunk) {			
+			tasks.push(cryptocompare.priceMulti(fsymbols.slice(i, i + chunk), 'USD'));			
+		}		
+
+		return Promise.all(tasks).then( results => {
+			let prices = {};
+			results.forEach( result => {
+				Object.keys(result).forEach( item => {
+					prices[item] = result[item]
+				});
+			});
+			return prices;
+		});
 	})
 	.then(prices => {
+		
 		balances.forEach(balance => {
 			if (balance.available) {
 				let funds = balance.funds;
@@ -104,7 +123,7 @@ Promise
 						return coin.symbol.toLowerCase() == program.coin.toLowerCase();
 					});
 					if (coins.length == 0) {
-						if (program.exchange){
+						if (program.exchange) {
 							console.log(chalk.red('Coin not found on this exchange.'));
 						}
 						return;
@@ -140,7 +159,7 @@ Promise
 					name: 'Total',
 					valueUSD: 0
 				}
-				coins.forEach( coin => {
+				coins.forEach(coin => {
 					total.valueUSD += coin.valueUSD;
 				});
 				coins.push(total);
@@ -183,4 +202,3 @@ Promise
 			}
 		});
 	});
-

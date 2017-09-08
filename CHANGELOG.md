@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.11.1 - 2017-09-08
+- Fixes a bug that popped up in the 'funds' command when there were more than 50 coins to get a price of at the same time.
+
 ## 0.11.0 - 2017-08-29
 - Fixes display of funds for IOT and CH (aka IOTA and BCH).
 
