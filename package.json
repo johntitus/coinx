@@ -18,6 +18,7 @@
   "author": "John Titus",
   "license": "MIT",
   "dependencies": {
+    "binance": "^1.0.2",
     "bitfinex-api-node": "^1.0.2",
     "bluebird": "^3.5.0",
     "capitalize": "^1.0.0",

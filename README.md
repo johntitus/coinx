@@ -28,7 +28,7 @@ Coinx is currently at version 0.10.0 You can upgrade with npm:
 `npm update -g coinx`
 
 ## Supported Exchanges
-Currently: Kraken, Poloniex, Bitfinex, Liqui, Bittrex. 
+Currently: Kraken, Poloniex, Bitfinex, Liqui, Bittrex.
 
 ## <a name="configure"></a>Configure
 The tool uses your exchange API keys to make requests and queries. You'll have to get your API keys from each exchange manually, but then you can store it in the tool by using the `config` command.

@@ -120,7 +120,7 @@ function processCoin(results){
 	let priceResults = results.filter(result => {
 		return result.available && result.priceBTC;
 	}).map(result => {
-		result.priceUSD = (result.priceBTC * btcPrice).toFixed(3);
+		result.priceUSD = (result.priceBTC * btcPrice).toFixed(8);
 		return result;
 	});
 
@@ -177,7 +177,10 @@ function processCoin(results){
 					return 'Price in USD'
 				},
 				dataTransform: function(data) {
-					return (data) ? '$' + parseFloat(data).toFixed(2) : '';
+					let price = parseFloat(data);
+					let decimals = (price > .01) ? 2 : 5;
+					
+					return (data) ? '$' + price.toFixed(decimals) : '';
 				},
 				align: 'right'
 			}
