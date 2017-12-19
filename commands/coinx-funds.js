@@ -69,13 +69,16 @@ Promise
 		let fsymbols = [];
 		balances = results;
 
-		results.forEach(exchange => {
+		balances.forEach(exchange => {
 			if (exchange.available) {
 				Object.keys(exchange.funds).forEach(coin => {
 					if (coin == 'CH') {
 						coin = 'BCH';
 					}
 					fsymbols.push(coin);
+
+					// remove coin if balance is zero
+					if (exchange.funds[coin] == 0) delete exchange.funds[coin];
 				});
 			}
 		});
